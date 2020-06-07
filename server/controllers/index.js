@@ -1,16 +1,13 @@
 const db = require("../db");
+const users = require("../db/models/users");
 
 const createUser = (req, res) => {
-  const { name, email, password } = req.body;
-  const queryString =
-    "INSERT INTO users (name, email, password) VALUES (?, ? , ?)";
-  db.query(queryString, [name, email, password], (err, string) => {
-    if (err) {
-      res.status(404).send(err);
-    } else {
-      res.status(201);
-    }
-  });
+  const body = req.body;
+
+  users
+    .create(body)
+    .then((response) => res.status(201).send())
+    .catch((err) => res.status(404).send(err));
 };
 
 module.exports = {
