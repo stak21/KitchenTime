@@ -1,5 +1,6 @@
 const db = require("../db");
-const users = require("../db/models/users");
+const users = require("../models/users");
+const ingredients = require("../models/ingredients");
 
 const createUser = (req, res) => {
   const body = req.body;
@@ -10,6 +11,16 @@ const createUser = (req, res) => {
     .catch((err) => res.status(404).send(err));
 };
 
+const createIngredient = (req, res) => {
+  const body = req.body;
+
+  ingredients
+    .create(body)
+    .then((response) => res.status(201).send())
+    .catch((err) => res.status(404).send(err));
+};
+
 module.exports = {
   createUser,
+  createIngredient,
 };
