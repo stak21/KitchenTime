@@ -28,6 +28,31 @@ const create = (data) => {
   });
 };
 
+const get = (data) => {
+  return new Promise((resolve, reject) => {
+    const { name } = data;
+
+    const queryString = `SELECT name from ingredients where name=${name}`;
+
+    db.query(queryString, (err, response) => {
+      console.log(err, response);
+      if (err) {
+        return reject(err);
+      } else {
+        resolve(response);
+      }
+    });
+  });
+};
+
+const addToUser = (data) => {
+  // find ingredient
+  // if it exists add to join table
+  // else
+  // return 404 telling user that the ingredient is not found
+};
+
 module.exports = {
   create,
+  get,
 };

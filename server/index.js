@@ -9,5 +9,6 @@ app.use(express.urlencoded({ extended: false }));
 
 app.post("/api/users", controllers.createUser);
 app.post("/api/ingredients", controllers.createIngredient);
+app.get("/api/ingredients", controllers.getIngredient);
 
 app.listen(port);

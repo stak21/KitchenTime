@@ -20,7 +20,19 @@ const createIngredient = (req, res) => {
     .catch((err) => res.status(404).send(err));
 };
 
+const getIngredient = (req, res) => {
+  const query = req.query;
+
+  console.log(query);
+
+  ingredients
+    .get(query)
+    .then((response) => res.status(200).send(response))
+    .catch((err) => res.status(404).send(err));
+};
+
 module.exports = {
   createUser,
   createIngredient,
+  getIngredient,
 };
