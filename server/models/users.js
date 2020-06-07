@@ -1,4 +1,4 @@
-const db = require("../index");
+const db = require("../db");
 
 const create = (data) => {
   return new Promise((resolve, reject) => {
