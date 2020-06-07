@@ -12,3 +12,9 @@ web-report/
 
 # macOS
 .DS_Store
+
+*.swp
+*.pem
+.env
+.envrc
+
