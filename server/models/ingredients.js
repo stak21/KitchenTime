@@ -45,12 +45,25 @@ const get = (data) => {
   });
 };
 
-const joinUser = (ingredient_id, user_id, type) => {
+const joinUser = (ingredientId, userId, type) => {
   return new Promise((resolve, reject) => {
     const queryString =
       "INSERT INTO user_ingredients (user_id, ingredient_id, type) VALUES (?, ?, ?)";
 
-    db.query(queryString, [user_id, ingredient_id, type], (err, results) => {
+    db.query(queryString, [userId, ingredientId, type], (err, results) => {
+      if (err) {
+        return reject(err);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+};
+
+const deleteUser = (ingredientId, userId, type) => {
+  return new Promise((resolve, reject) => {
+    const queryString = `DELETE FROM user_ingredients WHERE user_id=${userId} AND ingredient_id=${ingredientId}`;
+    db.query(queryString, [userId, ingredientId], (err, results) => {
       if (err) {
         return reject(err);
       } else {
@@ -64,4 +77,5 @@ module.exports = {
   create,
   get,
   joinUser,
+  deleteUser,
 };

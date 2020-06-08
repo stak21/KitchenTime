@@ -44,9 +44,20 @@ const addIngredientToUser = (req, res) => {
     .catch((err) => res.status(404).send(err));
 };
 
+const deleteIngredientToUser = (req, res) => {
+  const { ingredientId, userId } = req.params;
+  const { type } = req.body;
+
+  ingredients
+    .deleteUser(ingredientId, userId)
+    .then((response) => res.status(204).send())
+    .catch((err) => res.status(404).send(err));
+};
+
 module.exports = {
   createUser,
   createIngredient,
   getIngredient,
   addIngredientToUser,
+  deleteIngredientToUser,
 };
