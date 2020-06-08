@@ -28,6 +28,40 @@ const create = (data) => {
   });
 };
 
+const get = (data) => {
+  return new Promise((resolve, reject) => {
+    const { name } = data;
+
+    const queryString = `SELECT name from ingredients where name=${name}`;
+
+    db.query(queryString, (err, response) => {
+      console.log(err, response);
+      if (err) {
+        return reject(err);
+      } else {
+        resolve(response);
+      }
+    });
+  });
+};
+
+const joinUser = (ingredient_id, user_id, type) => {
+  return new Promise((resolve, reject) => {
+    const queryString =
+      "INSERT INTO user_ingredients (user_id, ingredient_id, type) VALUES (?, ?, ?)";
+
+    db.query(queryString, [user_id, ingredient_id, type], (err, results) => {
+      if (err) {
+        return reject(err);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+};
+
 module.exports = {
   create,
+  get,
+  joinUser,
 };
