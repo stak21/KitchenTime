@@ -2,6 +2,7 @@ const db = require("../db");
 const users = require("../models/users");
 const ingredients = require("../models/ingredients");
 
+// User
 const createUser = (req, res) => {
   const body = req.body;
 
@@ -11,6 +12,7 @@ const createUser = (req, res) => {
     .catch((err) => res.status(404).send(err));
 };
 
+// Ingredient
 const createIngredient = (req, res) => {
   const body = req.body;
 
@@ -31,6 +33,7 @@ const getIngredient = (req, res) => {
     .catch((err) => res.status(404).send(err));
 };
 
+// User Ingredient
 const addIngredientToUser = (req, res) => {
   const { ingredientId, userId } = req.params;
   const { type } = req.body;
