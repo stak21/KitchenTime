@@ -14,5 +14,9 @@ app.post(
   "/api/ingredients/:ingredientId/users/:userId",
   controllers.addIngredientToUser
 );
+app.delete(
+  "/api/ingredients/:ingredientId/users/:userId",
+  controllers.deleteIngredientToUser
+);
 
 app.listen(port);
