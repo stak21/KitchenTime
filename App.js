@@ -1,19 +1,36 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from "react";
+import { Platform, StatusBar, StyleSheet, Text, View } from "react-native";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
+import Pantry from "./app/screens/Pantry";
+import ShoppingList from "./app/screens/ShoppingList";
+import Tabs from "./app/screens/Tabs";
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeScreen: "pantry",
+    };
+  }
+
+  render() {
+    const { activeScreen } = this.state;
+    console.log(activeScreen);
+    return (
+      <View style={styles.container}>
+        {activeScreen === "shoppingList" ? <ShoppingList /> : <Pantry />}
+        <Tabs />
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });
+
+export default App;
