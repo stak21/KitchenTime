@@ -31,8 +31,19 @@ const getIngredient = (req, res) => {
     .catch((err) => res.status(404).send(err));
 };
 
+const addIngredientToUser = (req, res) => {
+  const { ingredientId, userId } = req.params;
+  const { type } = req.body;
+
+  ingredients
+    .joinUser(ingredientId, userId, type)
+    .then((response) => res.status(201).send())
+    .catch((err) => res.status(404).send(err));
+};
+
 module.exports = {
   createUser,
   createIngredient,
   getIngredient,
+  addIngredientToUser,
 };

@@ -45,14 +45,23 @@ const get = (data) => {
   });
 };
 
-const addToUser = (data) => {
-  // find ingredient
-  // if it exists add to join table
-  // else
-  // return 404 telling user that the ingredient is not found
+const joinUser = (ingredient_id, user_id, type) => {
+  return new Promise((resolve, reject) => {
+    const queryString =
+      "INSERT INTO user_ingredients (user_id, ingredient_id, type) VALUES (?, ?, ?)";
+
+    db.query(queryString, [user_id, ingredient_id, type], (err, results) => {
+      if (err) {
+        return reject(err);
+      } else {
+        resolve(results);
+      }
+    });
+  });
 };
 
 module.exports = {
   create,
   get,
+  joinUser,
 };
