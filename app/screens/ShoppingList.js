@@ -30,7 +30,7 @@ class ShoppingList extends Component {
       .catch((error) => console.log("Failed to load shopping list."));
   };
 
-  async handlePlusButton(target) {
+  async handlePlusButton() {
     const { shoppingList, currentText } = this.state;
 
     if (currentText === "") {
@@ -49,6 +49,12 @@ class ShoppingList extends Component {
         });
       })
       .catch((err) => console.error(err));
+  }
+
+  async handleToPantry() {
+    // remove all selected items
+    // remove select items from shoppingListStore
+    // send it to pantryStore
   }
 
   render() {
@@ -77,7 +83,10 @@ class ShoppingList extends Component {
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => <ListItem>{item}</ListItem>}
         />
-        <Button title="Add To Pantry" />
+        <Button
+          title="Add To Pantry"
+          onPress={this.handleToPantry.bind(this)}
+        />
       </Container>
     );
   }
