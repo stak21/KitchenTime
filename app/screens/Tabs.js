@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
-import Pantry from "./Pantry";
+import PantryList from "./PantryList";
 import ShoppingList from "./ShoppingList";
 
 const Tab = createBottomTabNavigator();
@@ -30,7 +30,7 @@ const Tabs = (props) => {
       }}
     >
       <Tab.Screen name="Shopping List" component={ShoppingList} />
-      <Tab.Screen name="Pantry" component={Pantry} />
+      <Tab.Screen name="Pantry" component={PantryList} />
     </Tab.Navigator>
   );
 };
