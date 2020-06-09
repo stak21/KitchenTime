@@ -1,30 +1,58 @@
 import React, { Component } from "react";
 import styled from "styled-components/native";
-import { Platform, StatusBar, Button } from "react-native";
+import { AsyncStorage, Platform, StatusBar, Button } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import { TextInput } from "react-native-gesture-handler";
+
+const key = "SHOPPING_LIST";
 
 class ShoppingList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ingredients: [],
+      shoppingList: [],
       currentText: "",
     };
   }
 
-  handlePlusButton(target) {
-    this.setState((prevState) => {
-      return {
-        ingredients: [prevState.currentText, ...prevState.ingredients],
-        currentText: "",
-      };
-    });
+  componentWillMount() {
+    this.load();
+  }
+
+  load = async () => {
+    await AsyncStorage.getItem(key)
+      .then((req) => JSON.parse(req))
+      .then((shoppingList) => {
+        console.log(shoppingList);
+        this.setState({ shoppingList });
+      })
+      .catch((error) => console.log("Failed to load shopping list."));
+  };
+
+  async handlePlusButton(target) {
+    const { shoppingList, currentText } = this.state;
+
+    if (currentText === "") {
+      return;
+    }
+
+    const newStore = [currentText, ...shoppingList];
+
+    await AsyncStorage.setItem(key, JSON.stringify(newStore))
+      .then(() => {
+        this.setState((prevState) => {
+          return {
+            shoppingList: newStore,
+            currentText: "",
+          };
+        });
+      })
+      .catch((err) => console.error(err));
   }
 
   render() {
-    const { currentText, ingredients } = this.state;
+    const { currentText, shoppingList } = this.state;
 
     return (
       <Container>
@@ -45,7 +73,7 @@ class ShoppingList extends Component {
           </SearchBarPlusButton>
         </SearchbarContainer>
         <StyledFlatList
-          data={ingredients}
+          data={shoppingList}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => <ListItem>{item}</ListItem>}
         />
