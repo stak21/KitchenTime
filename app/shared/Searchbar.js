@@ -4,7 +4,12 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import { TextInput } from "react-native-gesture-handler";
 
-const Searchbar = ({ currentText, handlePlusButton, handleChangeText }) => (
+const Searchbar = ({
+  currentText,
+  handlePlusButton,
+  handleChangeText,
+  buttonEnabled = "true",
+}) => (
   <SearchbarContainer>
     <SearchBarTextArea>
       <Icon name="search" style={{ fontSize: 24 }} />
@@ -14,9 +19,11 @@ const Searchbar = ({ currentText, handlePlusButton, handleChangeText }) => (
         value={currentText}
       />
     </SearchBarTextArea>
-    <SearchBarPlusButton onPress={handlePlusButton}>
-      <AntIcon name="pluscircleo" style={{ fontSize: 24 }} />
-    </SearchBarPlusButton>
+    {buttonEnabled ? (
+      <SearchBarPlusButton onPress={handlePlusButton}>
+        <AntIcon name="pluscircleo" style={{ fontSize: 24 }} />
+      </SearchBarPlusButton>
+    ) : null}
   </SearchbarContainer>
 );
 

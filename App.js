@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 
-import Tabs from "./app/screens/Tabs";
+import Tabs from "./app/shared/Tabs";
 import { MyTheme } from "./app/config/colors";
 
 class App extends Component {
