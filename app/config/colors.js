@@ -1,10 +1,10 @@
 const MyTheme = {
   dark: false,
   colors: {
-    primary: "rgb(255, 45, 85)",
-    background: "rgb(50, 50, 50)",
+    primary: "rgb(255, 255, 85)",
+    background: "rgb(0, 50, 50)",
     card: "rgb(255, 255, 255)",
-    text: "rgb(28, 28, 30)",
+    text: "rgb(255, 255, 255)",
     border: "rgb(199, 199, 204)",
   },
 };

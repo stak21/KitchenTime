@@ -29,8 +29,8 @@ const Tabs = (props) => {
         inactiveTintColor: "gray",
       }}
     >
-      <Tab.Screen name="Pantry" component={Pantry} />
       <Tab.Screen name="Shopping List" component={ShoppingList} />
+      <Tab.Screen name="Pantry" component={Pantry} />
     </Tab.Navigator>
   );
 };
