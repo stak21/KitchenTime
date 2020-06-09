@@ -6,7 +6,7 @@ const ListItem = ({ item, handleRemoveItem }) => (
   <ItemContainer>
     <ItemText>{item}</ItemText>
     <TouchableOpacity onPress={() => handleRemoveItem(item)}>
-      <WarningText>Delete</WarningText>
+      <WarningText>X</WarningText>
     </TouchableOpacity>
   </ItemContainer>
 );
@@ -26,10 +26,11 @@ const ItemContainer = styled.View`
 
 const WarningText = styled.Text`
   color: white;
+  font-size: 30px;
   font-weight: 900;
   background: #e54b4b;
   border-radius: 5px;
   border: none;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-  padding: 7.5px;
+  padding: 0px 5px;
 `;
