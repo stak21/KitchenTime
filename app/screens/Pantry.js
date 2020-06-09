@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, StatusBar, Platform } from "react-native";
 
 const ShoppingList = (props) => {
   return (
@@ -14,9 +14,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
-    backgroundColor: "blue",
-    justifyContent: "center",
-    alignItems: "center",
   },
 });
 

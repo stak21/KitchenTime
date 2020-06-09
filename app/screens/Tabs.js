@@ -1,39 +1,38 @@
 import React from "react";
-import {
-  Image,
-  Platform,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { StyleSheet } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Icon from "react-native-vector-icons/FontAwesome5";
+
+import Pantry from "./Pantry";
+import ShoppingList from "./ShoppingList";
+
+const Tab = createBottomTabNavigator();
 
 const Tabs = (props) => {
   return (
-    <View style={styles.navbar}>
-      <View style={styles.navTab}>
-        <Image source={require("../../assets/icon.png")}></Image>
-      </View>
-      <View style={styles.navTab}>
-        <Image source={require("../../assets/icon.png")}></Image>
-      </View>
-      <View style={styles.navTab}>
-        <Image source={require("../../assets/icon.png")}></Image>
-      </View>
-    </View>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === "Pantry") {
+            iconName = "archive";
+          } else if (route.name === "Shopping List") {
+            iconName = "list";
+          }
+
+          return <Icon name={iconName} size={size} color={color} />;
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: "tomato",
+        inactiveTintColor: "gray",
+      }}
+    >
+      <Tab.Screen name="Pantry" component={Pantry} />
+      <Tab.Screen name="Shopping List" component={ShoppingList} />
+    </Tab.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  navbar: {
-    width: "100%",
-    height: 75,
-    backgroundColor: "grey",
-    flexDirection: "row",
-  },
-  navTab: {
-    flex: 1,
-  },
-});
 
 export default Tabs;
