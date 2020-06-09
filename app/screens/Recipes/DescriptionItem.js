@@ -1,7 +1,37 @@
 import React, { Component } from "react";
-import { UIManager, LayoutAnimation, TouchableOpacity } from "react-native";
+import {
+  UIManager,
+  LayoutAnimation,
+  TouchableOpacity,
+  CheckBox,
+  FlatList,
+} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import styled from "styled-components";
+import IngredientItem from "./IngredientItem";
+
+const ingredientsList = [
+  {
+    name: "Beans",
+    isChecked: false,
+  },
+  {
+    name: "BokChoy",
+    isChecked: false,
+  },
+  {
+    name: "String Beans",
+    isChecked: false,
+  },
+  {
+    name: "Tongue",
+    isChecked: false,
+  },
+  {
+    name: "Chicken",
+    isChecked: false,
+  },
+];
 
 class DescriptionItem extends Component {
   constructor(props) {
@@ -9,6 +39,7 @@ class DescriptionItem extends Component {
 
     this.state = {
       expanded: false,
+      ingredients: [],
     };
 
     if (Platform.OS === "android") {
@@ -22,7 +53,7 @@ class DescriptionItem extends Component {
   };
 
   render() {
-    const { expanded } = this.state;
+    const { expanded, isChecked } = this.state;
     const { title } = this.props;
 
     return (
@@ -34,17 +65,12 @@ class DescriptionItem extends Component {
           </SummaryContainer>
         </TouchableOpacity>
         <ExpandableScrollableContainer expanded={expanded}>
-          <StyledText>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum.
-          </StyledText>
+          <FlatList
+            data={ingredientsList}
+            listKey={(item, index) => index.toString()}
+            renderItem={({ item }) => <IngredientItem ingredient={item} />}
+            nestedScrollEnabled
+          />
         </ExpandableScrollableContainer>
       </DescriptionContainer>
     );
@@ -70,7 +96,7 @@ const ItemText = styled.Text`
 `;
 
 const ExpandableScrollableContainer = styled.ScrollView`
-  height: ${(props) => (props.expanded ? 250 : 0)};
+  height: ${(props) => (props.expanded ? "null" : 0)};
   overflow: hidden;
 `;
 
