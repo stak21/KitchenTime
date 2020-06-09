@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { AsyncStorage, Platform, StatusBar, Button } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome5";
-import AntIcon from "react-native-vector-icons/AntDesign";
-import { TextInput } from "react-native-gesture-handler";
+
+import Searchbar from "../shared/Searchbar";
+import ListItem from "../shared/ListItem";
 
 const key = "PANTRY_LIST";
 
@@ -29,7 +29,26 @@ class PantryList extends Component {
       .catch((error) => console.log("Failed to load pantry."));
   };
 
-  async handlePlusButton() {
+  handleRemoveItem = async (item) => {
+    console.log("hello", item);
+    await AsyncStorage.getItem(key)
+      .then((req) => JSON.parse(req))
+      .then(async (pantryList) => {
+        const newStore = pantryList.filter((ingredient) => ingredient != item);
+        await AsyncStorage.setItem(key, JSON.stringify(newStore)).then(() => {
+          this.setState({ pantryList: newStore || [] });
+        });
+      })
+      .catch((err) => console.error(err));
+  };
+
+  handleChangeText = (currentText) => {
+    this.setState({
+      currentText,
+    });
+  };
+
+  handlePlusButton = async () => {
     const { pantryList, currentText } = this.state;
 
     if (currentText === "") {
@@ -48,7 +67,8 @@ class PantryList extends Component {
         });
       })
       .catch((err) => console.error(err));
-  }
+  };
+
   render() {
     const { currentText, pantryList } = this.state;
     return (
@@ -56,23 +76,17 @@ class PantryList extends Component {
         <TitleContainer>
           <TitleText>Pantry</TitleText>
         </TitleContainer>
-        <SearchbarContainer>
-          <SearchBarTextArea>
-            <Icon name="search" style={{ fontSize: 24 }} />
-            <StyledTextInput
-              placeholder="Search"
-              onChangeText={(currentText) => this.setState({ currentText })}
-              value={currentText}
-            />
-          </SearchBarTextArea>
-          <SearchBarPlusButton onPress={this.handlePlusButton.bind(this)}>
-            <AntIcon name="pluscircleo" style={{ fontSize: 24 }} />
-          </SearchBarPlusButton>
-        </SearchbarContainer>
+        <Searchbar
+          currentText={currentText}
+          handlePlusButton={this.handlePlusButton}
+          handleChangeText={this.handleChangeText}
+        />
         <StyledFlatList
           data={pantryList}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => <ListItem>{item}</ListItem>}
+          renderItem={({ item }) => (
+            <ListItem item={item} handleRemoveItem={this.handleRemoveItem} />
+          )}
         />
       </Container>
     );
@@ -89,42 +103,8 @@ const Container = styled.View`
 
 const FlexContainer = styled.View``;
 
-const SearchbarContainer = styled.View`
-  background-color: orange;
-  height: 80px;
-  justify-content: center;
-  padding-horizontal: 5px;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const SearchBarTextArea = styled.View`
-  height: 50px;
-  background-color: white;
-  flex-direction: row;
-  padding: 5px;
-  align-items: center;
-  width: 100%;
-  flex: 1;
-`;
-
-const SearchBarPlusButton = styled.TouchableOpacity`
-  margin: 10px;
-`;
-
-const StyledTextInput = styled.TextInput`
-  font-size: 24px;
-  width: 100%;
-`;
-
 const StyledFlatList = styled.FlatList`
   background-color: white;
-`;
-
-const ListItem = styled.Text`
-  padding: 20px;
-  font-size: 20px;
-  border: 1px solid black;
 `;
 
 const TitleContainer = styled.View`
