@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import styled from "styled-components/native";
 import {
   Text,
@@ -25,30 +25,54 @@ const dataList = [
   "5",
   "6",
 ];
-const ShoppingList = (props) => {
-  return (
-    <Container>
-      <TitleContainer>
-        <TitleText>Shopping List</TitleText>
-      </TitleContainer>
-      <SearchbarContainer>
-        <SearchBarTextArea>
-          <Icon name="search" style={{ fontSize: 24 }} />
-          <StyledTextInput placeholder="Search" />
-        </SearchBarTextArea>
-        <SearchBarPlusButton onPress={() => console.log("hello")}>
-          <AntIcon name="pluscircleo" style={{ fontSize: 24 }} />
-        </SearchBarPlusButton>
-      </SearchbarContainer>
-      <StyledFlatList
-        data={dataList}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => <ListItem>{item}</ListItem>}
-      />
-      <Button title="Add To Pantry" />
-    </Container>
-  );
-};
+class ShoppingList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      ingredients: [],
+      currentText: "",
+    };
+  }
+
+  handlePlusButton(target) {
+    dataList.push(this.state.currentText);
+
+    this.setState({
+      currentText: "",
+    });
+  }
+
+  render() {
+    const { currentText } = this.state;
+
+    return (
+      <Container>
+        <TitleContainer>
+          <TitleText>Shopping List</TitleText>
+        </TitleContainer>
+        <SearchbarContainer>
+          <SearchBarTextArea>
+            <Icon name="search" style={{ fontSize: 24 }} />
+            <StyledTextInput
+              placeholder="Search"
+              onChangeText={(currentText) => this.setState({ currentText })}
+              value={currentText}
+            />
+          </SearchBarTextArea>
+          <SearchBarPlusButton onPress={this.handlePlusButton.bind(this)}>
+            <AntIcon name="pluscircleo" style={{ fontSize: 24 }} />
+          </SearchBarPlusButton>
+        </SearchbarContainer>
+        <StyledFlatList
+          data={dataList}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => <ListItem>{item}</ListItem>}
+        />
+        <Button title="Add To Pantry" />
+      </Container>
+    );
+  }
+}
 
 const Container = styled.View`
   width: 100%;
