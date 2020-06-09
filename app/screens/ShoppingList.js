@@ -1,30 +1,10 @@
 import React, { Component } from "react";
 import styled from "styled-components/native";
-import {
-  Text,
-  View,
-  Platform,
-  StatusBar,
-  FlatList,
-  Button,
-  TouchableOpacity,
-} from "react-native";
+import { Platform, StatusBar, Button } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import { TextInput } from "react-native-gesture-handler";
 
-const dataList = [
-  "frogs",
-  "chicken",
-  "duck",
-  "lime",
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-];
 class ShoppingList extends Component {
   constructor(props) {
     super(props);
@@ -35,15 +15,16 @@ class ShoppingList extends Component {
   }
 
   handlePlusButton(target) {
-    dataList.push(this.state.currentText);
-
-    this.setState({
-      currentText: "",
+    this.setState((prevState) => {
+      return {
+        ingredients: [prevState.currentText, ...prevState.ingredients],
+        currentText: "",
+      };
     });
   }
 
   render() {
-    const { currentText } = this.state;
+    const { currentText, ingredients } = this.state;
 
     return (
       <Container>
@@ -64,7 +45,7 @@ class ShoppingList extends Component {
           </SearchBarPlusButton>
         </SearchbarContainer>
         <StyledFlatList
-          data={dataList}
+          data={ingredients}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => <ListItem>{item}</ListItem>}
         />
