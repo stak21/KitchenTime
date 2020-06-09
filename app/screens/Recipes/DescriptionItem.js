@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 import {
+  Platform,
   UIManager,
   LayoutAnimation,
   TouchableOpacity,
   CheckBox,
   FlatList,
+  Text,
+  Image,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import styled from "styled-components";
+import styled from "styled-components/native";
 import IngredientItem from "./IngredientItem";
 
 const ingredientsList = [
@@ -54,8 +57,8 @@ class DescriptionItem extends Component {
 
   render() {
     const { expanded, isChecked } = this.state;
-    const { title } = this.props;
-
+    const { title, recipe, selectedRecipe } = this.props;
+    console.log("selected", selectedRecipe);
     return (
       <DescriptionContainer>
         <TouchableOpacity onPress={this.changeLayout}>
@@ -65,12 +68,44 @@ class DescriptionItem extends Component {
           </SummaryContainer>
         </TouchableOpacity>
         <ExpandableScrollableContainer expanded={expanded}>
-          <FlatList
-            data={ingredientsList}
-            listKey={(item, index) => index.toString()}
-            renderItem={({ item }) => <IngredientItem ingredient={item} />}
-            nestedScrollEnabled
-          />
+          {title === "Ingredients" ? (
+            <>
+              <Text>Owned</Text>
+              <FlatList
+                data={recipe.usedIngredients}
+                listKey={(item, index) => index.toString()}
+                renderItem={({ item }) => <IngredientItem ingredient={item} />}
+                nestedScrollEnabled
+              />
+              <Text>Missing</Text>
+              <FlatList
+                data={recipe.missingIngredients}
+                listKey={(item, index) => index.toString()}
+                renderItem={({ item }) => <IngredientItem ingredient={item} />}
+                nestedScrollEnabled
+              />
+            </>
+          ) : null}
+          {selectedRecipe ? (
+            <>
+              {selectedRecipe.readyInMinutes ? (
+                <StyledText>
+                  Estimate time: {selectedRecipe.readyInMinutes}
+                </StyledText>
+              ) : null}
+              {selectedRecipe.preparationMinutes ? (
+                <StyledText>
+                  Prep time: {selectedRecipe.preparationMinutes}
+                </StyledText>
+              ) : null}
+              {selectedRecipe.servings ? (
+                <StyledText>Servings: {selectedRecipe.servings}</StyledText>
+              ) : null}
+              {selectedRecipe.instructions ? (
+                <StyledText>{selectedRecipe.instructions}</StyledText>
+              ) : null}
+            </>
+          ) : null}
         </ExpandableScrollableContainer>
       </DescriptionContainer>
     );
@@ -78,6 +113,11 @@ class DescriptionItem extends Component {
 }
 
 export default DescriptionItem;
+
+const FoodImage = styled.Image`
+    width: 200px,
+    height: 200px,
+`;
 
 const DescriptionContainer = styled.View`
   padding: 10px;

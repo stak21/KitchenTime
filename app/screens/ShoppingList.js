@@ -5,6 +5,9 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import { TextInput } from "react-native-gesture-handler";
 
+import Searchbar from "../shared/Searchbar";
+import ListItem from "../shared/ListItem";
+
 const key = "SHOPPING_LIST";
 
 class ShoppingList extends Component {
@@ -24,13 +27,12 @@ class ShoppingList extends Component {
     await AsyncStorage.getItem(key)
       .then((req) => JSON.parse(req))
       .then((shoppingList) => {
-        console.log(shoppingList);
-        this.setState({ shoppingList });
+        this.setState({ shoppingList: shoppingList || [] });
       })
       .catch((error) => console.log("Failed to load shopping list."));
   };
 
-  async handlePlusButton() {
+  handlePlusButton = async () => {
     const { shoppingList, currentText } = this.state;
 
     if (currentText === "") {
@@ -49,7 +51,27 @@ class ShoppingList extends Component {
         });
       })
       .catch((err) => console.error(err));
-  }
+  };
+
+  handleChangeText = (currentText) => {
+    this.setState({
+      currentText,
+    });
+  };
+
+  handleRemoveItem = async (item) => {
+    await AsyncStorage.getItem(key)
+      .then((req) => JSON.parse(req))
+      .then(async (shoppingList) => {
+        const newStore = shoppingList.filter(
+          (ingredient) => ingredient != item
+        );
+        await AsyncStorage.setItem(key, JSON.stringify(newStore)).then(() => {
+          this.setState({ shoppingList: newStore || [] });
+        });
+      })
+      .catch((err) => console.error(err));
+  };
 
   async handleToPantry() {
     // remove all selected items
@@ -65,23 +87,17 @@ class ShoppingList extends Component {
         <TitleContainer>
           <TitleText>Shopping List</TitleText>
         </TitleContainer>
-        <SearchbarContainer>
-          <SearchBarTextArea>
-            <Icon name="search" style={{ fontSize: 24 }} />
-            <StyledTextInput
-              placeholder="Search"
-              onChangeText={(currentText) => this.setState({ currentText })}
-              value={currentText}
-            />
-          </SearchBarTextArea>
-          <SearchBarPlusButton onPress={this.handlePlusButton.bind(this)}>
-            <AntIcon name="pluscircleo" style={{ fontSize: 24 }} />
-          </SearchBarPlusButton>
-        </SearchbarContainer>
+        <Searchbar
+          currentText={currentText}
+          handlePlusButton={this.handlePlusButton}
+          handleChangeText={this.handleChangeText}
+        />
         <StyledFlatList
           data={shoppingList}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => <ListItem>{item}</ListItem>}
+          renderItem={({ item }) => (
+            <ListItem item={item} handleRemoveItem={this.handleRemoveItem} />
+          )}
         />
         <Button
           title="Add To Pantry"
@@ -130,12 +146,6 @@ const StyledTextInput = styled.TextInput`
 
 const StyledFlatList = styled.FlatList`
   background-color: white;
-`;
-
-const ListItem = styled.Text`
-  padding: 20px;
-  font-size: 20px;
-  border: 1px solid black;
 `;
 
 const TitleContainer = styled.View`

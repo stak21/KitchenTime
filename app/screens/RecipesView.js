@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import styled from "styled-components";
+import React, { Component, useEffect } from "react";
+import styled from "styled-components/native";
 import { AsyncStorage, Platform, StatusBar } from "react-native";
 
 import Searchbar from "../shared/Searchbar";
@@ -38,20 +38,46 @@ class RecipesView extends Component {
   loadRecipes = async () => {
     const { pantryList } = this.state;
     const ingredients = pantryList.join(",");
-    // await fetch(
-    //   `http://192.168.0.11:8080/api/recipes?ingredients=${ingredients}`
-    // )
-    //   // .then((res) => res.json())
-    //   .then((recipes) => {
-    //     // console.log(recipes.length);
-    //     // recipes.forEach((recipe) => console.log(recipe.title));
-    //     // this.setState({ recipes });
-    //   })
-    //   .catch((error) => console.error(error));
+    await fetch(
+      `http://192.168.0.11:8080/api/recipes?ingredients=${ingredients}`
+    )
+      .then((res) => res.json())
+      .then(async (results) => {
+        const recipes = await this.extractRecipes(results);
+        this.setState({ recipes });
+      })
+      .catch((error) => console.error(error));
+  };
+
+  extractIngredients = (ingredients) => {
+    return ingredients.map((ingredient) => {
+      return {
+        name: ingredient.name,
+        isChecked: false,
+      };
+    });
+  };
+
+  extractRecipes = (recipes) => {
+    const { pantryList } = this.state;
+
+    const extractedRecipes = recipes.map((recipe, index) => {
+      return {
+        missingIngredients: this.extractIngredients(recipe.missedIngredients),
+        usedIngredients: this.extractIngredients(recipe.usedIngredients),
+        totalIngredientsCount:
+          recipe.missedIngredients.length + recipe.usedIngredients.length,
+        title: recipe.title,
+        instructions: "",
+      };
+    });
+    console.log("recipe extracted: ", extractedRecipes);
+    return extractedRecipes;
   };
 
   render() {
     const { currentText, recipes, expanded } = this.state;
+    console.log("length", this.state);
 
     return (
       <Container>
@@ -61,13 +87,15 @@ class RecipesView extends Component {
         <Searchbar
           currentText={currentText}
           handleChangeText={this.handleChangeText}
-          buttonEnabled={false}
+          handlePlusButton={this.loadPantry}
         />
-        <StyledFlatList
-          data={dataList}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => <RecipeItem item={item} />}
-        />
+        {recipes.length > 0 ? (
+          <StyledFlatList
+            data={recipes}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => <RecipeItem item={item} />}
+          />
+        ) : null}
       </Container>
     );
   }

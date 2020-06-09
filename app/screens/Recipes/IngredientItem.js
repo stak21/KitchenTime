@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { CheckBox } from "react-native";
-import styled from "styled-components";
+import styled from "styled-components/native";
 
 class ingredientItem extends Component {
   constructor(props) {

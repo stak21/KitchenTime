@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import styled from "styled-components";
+import styled from "styled-components/native";
 import { AsyncStorage, Platform, StatusBar, Button } from "react-native";
 
 import Searchbar from "../shared/Searchbar";
@@ -30,7 +30,6 @@ class PantryList extends Component {
   };
 
   handleRemoveItem = async (item) => {
-    console.log("hello", item);
     await AsyncStorage.getItem(key)
       .then((req) => JSON.parse(req))
       .then(async (pantryList) => {
